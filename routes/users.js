@@ -40,20 +40,20 @@ router.post('/subjects/:name/student', function (req, res) {
     ({
         name: req.body.name,
         address: req.body.address,
-        phones: {
+        phones: [{
             name: req.body.name2,
             address: req.body.address2
-        }
+        }]
     });
     student.save(function (err, student) {
         if (err) return res.send(500, err.message);
         Subject.find({
             name: req.params.name
-        }, function (err, subjects) {
+        }, function (err, subject) {
             if (err) return res.send(500, err.message);
-            subjects = subjects[0];
-            subjects.students.push(student._id);
-            subjects.save(function (err, subject) {
+            Subject = subject[0];
+            subject.students.push(student._id);
+            subject.save(function (err, subject) {
                 if (err) return res.send(500, err.message);
                 res.status(200).jsonp(subject);
             });
